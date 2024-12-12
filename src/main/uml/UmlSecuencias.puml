@@ -1,0 +1,60 @@
+@startuml
+actor Usuario
+participant Main
+participant GestorElectronica
+participant BaseDatosLocal
+participant Marca
+participant Articulo
+participant Movil
+participant Television
+
+group "Añadir Marca"
+    Usuario -> Main : Solicitar añadir Marca
+    Main -> GestorElectronica : añadirMarca(marca)
+    GestorElectronica -> BaseDatosLocal : guardarMarca(id, marca)
+    BaseDatosLocal --> GestorElectronica : Confirmación
+    GestorElectronica --> Main : Marca añadida
+    Main --> Usuario : Marca añadida exitosamente
+end
+
+group "Añadir Televisor"
+    Usuario -> Main : Solicitar añadir Televisor
+    Main -> GestorElectronica : Verificar existencia de Marca
+    GestorElectronica -> BaseDatosLocal : obtenerMarcas()
+    BaseDatosLocal --> GestorElectronica : Lista de Marcas
+    GestorElectronica --> Main : Marca encontrada
+    Main -> Television : Crear instancia de Televisor
+    Main -> GestorElectronica : añadirArticulo(televisor)
+    GestorElectronica -> BaseDatosLocal : guardarArticulo(id, televisor)
+    BaseDatosLocal --> GestorElectronica : Confirmación
+    GestorElectronica --> Main : Televisor añadido
+    Main --> Usuario : Televisor añadido exitosamente
+else Marca no encontrada
+    GestorElectronica --> Main : Marca no encontrada
+    Main --> Usuario : Error - Marca no existe
+end
+
+group "Buscar Televisor"
+    Usuario -> Main : Solicitar buscar Televisor
+    Main -> GestorElectronica : buscarTelevisor(filtros)
+    GestorElectronica -> BaseDatosLocal : obtenerArticulos()
+    BaseDatosLocal --> GestorElectronica : Lista de Artículos
+    GestorElectronica --> Main : Resultado de Televisores
+    Main --> Usuario : Mostrar Televisores encontrados
+end
+
+group "Listar Marcas"
+    Usuario -> Main : Solicitar listar Marcas
+    Main -> GestorElectronica : listarMarcas()
+    GestorElectronica -> BaseDatosLocal : obtenerMarcas()
+    BaseDatosLocal --> GestorElectronica : Lista de Marcas
+    GestorElectronica --> Main : Lista ordenada de Marcas
+    Main --> Usuario : Mostrar Marcas
+end
+
+group "Salir"
+    Usuario -> Main : Solicitar Salir
+    Main --> Usuario : Terminar programa
+end
+
+@enduml

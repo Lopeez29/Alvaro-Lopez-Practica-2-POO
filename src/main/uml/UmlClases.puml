@@ -1,0 +1,103 @@
+@startuml
+package "Gestión de Electrónica" {
+    class Marca {
+        - nombre: String
+        - pais: String
+        - facturacion: float
+        + Marca(nombre: String, pais: String, facturacion: float)
+        + getNombre(): String
+        + getPais(): String
+        + getFacturacion(): float
+        + setNombre(nombre: String): void
+        + setPais(pais: String): void
+        + setFacturacion(facturacion: float): void
+        + toString(): String
+    }
+
+    abstract class Articulo {
+        - precio: float
+        - nombre: String
+        - marca: Marca
+        + Articulo(nombre: String, precio: float, marca: Marca)
+        + getNombre(): String
+        + getPrecio(): float
+        + getMarca(): Marca
+        + setNombre(nombre: String): void
+        + setPrecio(precio: float): void
+        + setMarca(marca: Marca): void
+        + toString(): String
+        + compareTo(articulo: Articulo): int
+    }
+
+    class Movil extends Articulo {
+        - ramGB: int
+        - sistemaOperativo: SistemaOperativo
+        + Movil(nombre: String, precio: float, marca: Marca, ramGB: int, sistemaOperativo: SistemaOperativo)
+        + getRamGB(): int
+        + getSistemaOperativo(): SistemaOperativo
+        + setRamGB(ramGB: int): void
+        + setSistemaOperativo(sistemaOperativo: SistemaOperativo): void
+        + toString(): String
+    }
+
+    class Television extends Articulo {
+        - pulgadas: int
+        - tipoPantalla: TipoPantalla
+        + Television(nombre: String, precio: float, marca: Marca, pulgadas: int, tipoPantalla: TipoPantalla)
+        + getPulgadas(): int
+        + getTipoPantalla(): TipoPantalla
+        + setPulgadas(pulgadas: int): void
+        + setTipoPantalla(tipoPantalla: TipoPantalla): void
+        + toString(): String
+    }
+
+    enum SistemaOperativo {
+        ANDROID
+        iOS
+    }
+
+    enum TipoPantalla {
+        LED
+        QLED
+        OLED
+        QNED
+    }
+
+    class GestorElectronica {
+        - conjuntoArticulos: HashMap<String, Articulo>
+        - conjuntoMarcas: HashMap<String, Marca>
+        - baseDatos: BaseDatosLocal
+        + GestorElectronica()
+        + añadirMarca(marca: Marca): void
+        + añadirArticulo(articulo: Articulo): void
+        + buscarTelevisor(nombreMarca: String, nombreArticulo: String, pulgadas: int, tipoPantalla: TipoPantalla, precioDesde: float, precioHasta: float): void
+        + mostrarArticulos(): void
+        + getInstancia(): GestorElectronica
+    }
+
+    class BaseDatosLocal {
+        - articulos: HashMap<String, Articulo>
+        - marcas: HashMap<String, Marca>
+        - static instancia: BaseDatosLocal
+        + getInstancia(): BaseDatosLocal
+        + guardarArticulo(id: String, articulo: Articulo): void
+        + guardarMarca(id: String, marca: Marca): void
+        + obtenerArticulos(): HashMap<String, Articulo>
+        + obtenerMarcas(): HashMap<String, Marca>
+    }
+
+    Marca *-- Articulo : "Composición"
+    Articulo <|-- Movil : "Herencia"
+    Articulo <|-- Television : "Herencia"
+    Movil --> SistemaOperativo : "Usa"
+    Television --> TipoPantalla : "Usa"
+    GestorElectronica --> BaseDatosLocal : "Accede"
+    GestorElectronica --> Articulo : "Gestiona"
+    GestorElectronica --> Marca : "Gestiona"
+    BaseDatosLocal --> BaseDatosLocal : "Singleton"
+    Articulo --> Marca : "Asociación"
+
+    note right of BaseDatosLocal : Base de datos\nimplementada con HashMap\n(Patrón Singleton)
+}
+
+@enduml

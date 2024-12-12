@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+actor Usuario
+
+rectangle "Gestión de Electrónica" {
+    usecase "Añadir Marca" as UC1
+    usecase "Añadir Televisor" as UC2
+    usecase "Añadir Móvil" as UC3
+    usecase "Buscar Marca" as UC4
+    usecase "Buscar Televisor" as UC5
+    usecase "Buscar Móvil" as UC6
+    usecase "Listar Marcas" as UC7
+    usecase "Listar Artículos" as UC8
+    usecase "Salir" as UC9
+}
+
+Usuario --> UC1 : "Añadir Marca"
+Usuario --> UC2 : "Añadir Televisor"
+Usuario --> UC3 : "Añadir Móvil"
+Usuario --> UC4 : "Buscar Marca"
+Usuario --> UC5 : "Buscar Televisor"
+Usuario --> UC6 : "Buscar Móvil"
+Usuario --> UC7 : "Listar Marcas"
+Usuario --> UC8 : "Listar Artículos"
+Usuario --> UC9 : "Salir"
+
+UC2 .> UC1 : "Verificar existencia\n de Marca"
+UC3 .> UC1 : "Verificar existencia\n de Marca"
+
+@enduml
